@@ -271,6 +271,18 @@ function showLogin() {
   setStatus('');
 }
 
+function hideLogin() {
+  if (loginSection) loginSection.hidden = true;
+}
+
+function hideSetup() {
+  if (setupSection) setupSection.hidden = true;
+}
+
+function hideDashboard() {
+  if (dashboard) dashboard.hidden = true;
+}
+
 function showPrivateAccessMessage() {
   hideLogin();
   hideSetup();
