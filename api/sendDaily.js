@@ -20,7 +20,7 @@ webpush.setVapidDetails(
   process.env.WEBPUSH_PRIVATE_KEY
 );
 
-async function handler(req, res) {
+module.exports = async (req, res) => {
   const userRef = db.collection('users').doc('partner');
   const userSnap = await userRef.get();
   if (!userSnap.exists) {
@@ -337,6 +337,4 @@ async function handler(req, res) {
 
   await Promise.all(sends);
   res.status(200).send('Notifications sent.');
-}
-
-module.exports = { handler };
+};

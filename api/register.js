@@ -13,7 +13,7 @@ if (!admin.apps.length) {
 }
 const db = admin.firestore();
 
-async function handler(req, res) {
+module.exports = async (req, res) => {
   if (req.method !== 'POST') {
     return res.status(405).send('Method Not Allowed');
   }
@@ -32,6 +32,4 @@ async function handler(req, res) {
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
-}
-
-module.exports = { handler };
+};

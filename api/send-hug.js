@@ -20,7 +20,11 @@ webpush.setVapidDetails(
   process.env.WEBPUSH_PRIVATE_KEY
 );
 
-async function handler(req, res) {
+module.exports = async (req, res) => {
+  if (req.method !== 'POST') {
+    return res.status(405).send('Method Not Allowed');
+  }
+
   const { userId } = req.body || {};
   if (!userId) {
     return res.status(400).json({ error: 'Invalid payload' });
@@ -60,6 +64,4 @@ async function handler(req, res) {
 
   await Promise.all(sends);
   res.status(200).send('Hug sent.');
-}
-
-module.exports = { handler };
+};

@@ -1,4 +1,4 @@
-function handler(req, res) {
+module.exports = (req, res) => {
   console.log('Debug endpoint called');
   
   const envVars = {
@@ -22,6 +22,4 @@ function handler(req, res) {
     allEnvKeys,
     timestamp: new Date().toISOString()
   });
-}
-
-module.exports = { handler };
+};
