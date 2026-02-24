@@ -358,6 +358,12 @@ function showPrivateAccessMessage() {
   hideSetup();
   hideDashboard();
   
+  // Hide loading screen
+  const loadingEl = document.getElementById('loading');
+  if (loadingEl) {
+    loadingEl.style.display = 'none';
+  }
+  
   // Create private access message
   const privateSection = document.getElementById('private-section') || createPrivateSection();
   privateSection.style.display = 'block';
