@@ -504,6 +504,28 @@ if (hugModal) {
 }
 
 async function main() {
+  // Check for app version and force update if needed
+  try {
+    const versionRes = await fetch('/api/version');
+    const versionData = await versionRes.json();
+    console.log('Server version:', versionData);
+    
+    if (versionData.forceUpdate) {
+      console.log('Force update required, clearing cache and reloading...');
+      // Clear everything and reload
+      if ('caches' in window) {
+        const cacheNames = await caches.keys();
+        await Promise.all(cacheNames.map(name => caches.delete(name)));
+      }
+      localStorage.clear();
+      sessionStorage.clear();
+      window.location.reload();
+      return;
+    }
+  } catch (error) {
+    console.log('Version check failed, continuing...');
+  }
+
   // Hide all sections initially to prevent flashing
   hideLogin();
   hideSetup();
