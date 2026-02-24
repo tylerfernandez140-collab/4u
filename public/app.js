@@ -110,23 +110,25 @@ function setStatus(msg) {
   if (activeStatusEl) activeStatusEl.textContent = msg || '';
 }
 
-function checkForIncomingHugs() {
+async function checkForIncomingHugs() {
   try {
-    const hugData = localStorage.getItem('pendingHug');
-    if (!hugData) return;
+    const res = await fetch('/api/hug');
+    if (!res.ok) return;
     
-    const hug = JSON.parse(hugData);
-    const now = Date.now();
+    const data = await res.json();
+    const hugs = data.hugs || [];
     
-    // Only show hug if it's from the other user and within last 30 seconds
     const senderName = currentUser === 'ivan' ? 'Ivan' : 'Angge';
     const otherUser = currentUser === 'ivan' ? 'Angge' : 'Ivan';
     
-    if (hug.sender === otherUser && (now - hug.timestamp) < 30000) {
-      console.log('Showing incoming hug from:', hug.sender);
-      showHugModal(hug.sender);
-      // Clear the hug after showing
-      localStorage.removeItem('pendingHug');
+    // Find hugs from the other user
+    const otherUserHugs = hugs.filter(hug => hug.sender === otherUser);
+    
+    if (otherUserHugs.length > 0) {
+      // Show the most recent hug
+      const latestHug = otherUserHugs[otherUserHugs.length - 1];
+      console.log('Showing incoming hug from:', latestHug.sender);
+      showHugModal(latestHug.sender);
     }
   } catch (error) {
     console.error('Error checking incoming hugs:', error);
@@ -149,16 +151,19 @@ async function sendHug() {
     console.log('Showing success modal for:', recipientName);
     showSuccessModal(recipientName);
     
-    // Store hug in localStorage for cross-device communication
-    const hugData = {
-      sender: currentUser === 'ivan' ? 'Ivan' : 'Angge',
-      timestamp: Date.now(),
-      id: Math.random().toString(36).substr(2, 9)
-    };
-    localStorage.setItem('pendingHug', JSON.stringify(hugData));
-    
-    // Check for incoming hugs periodically
-    checkForIncomingHugs();
+    // Send hug via API
+    try {
+      const senderName = currentUser === 'ivan' ? 'Ivan' : 'Angge';
+      await fetch('/api/hug', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sender: senderName }),
+      });
+      console.log('Hug sent via API');
+    } catch (apiError) {
+      console.error('API error:', apiError);
+      // Continue anyway - success modal already shown
+    }
     
     setStatus(''); // Clear status
     
