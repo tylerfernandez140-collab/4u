@@ -4,10 +4,11 @@ const fs = require('fs');
 require('dotenv').config();
 
 // Import API routes
-const { handler: vapidPublicKeyHandler } = require('./api/vapidPublicKey.js');
-const { handler: registerHandler } = require('./api/register.js');
-const { handler: sendHugHandler } = require('./api/send-hug.js');
-const { handler: sendDailyHandler } = require('./api/sendDaily.js');
+const vapidPublicKeyHandler = require('./api/vapidPublicKey.js');
+const registerHandler = require('./api/register.js');
+const sendHugHandler = require('./api/send-hug.js');
+const sendDailyHandler = require('./api/sendDaily.js');
+const versionHandler = require('./api/version.js');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -18,6 +19,7 @@ app.use(express.static('public'));
 
 // API Routes
 app.get('/api/vapidPublicKey', vapidPublicKeyHandler);
+app.get('/api/version', versionHandler);
 app.post('/api/register', registerHandler);
 app.post('/api/send-hug', sendHugHandler);
 app.post('/api/sendDaily', sendDailyHandler);

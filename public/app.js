@@ -17,6 +17,9 @@ const modalClose = document.querySelector('.modal-close');
 const successModal = document.getElementById('success-modal');
 const successMessage = document.getElementById('success-message');
 
+// Add debug logging at the very start
+console.log('App.js loaded successfully');
+
 // Add cache busting for debugging
 const CACHE_BUST = Date.now();
 console.log('App loading with cache bust:', CACHE_BUST);
@@ -334,8 +337,22 @@ function showSetup() {
   if (dashboard) dashboard.style.display = 'none';
 }
 
+function hideLoading() {
+  const loadingEl = document.getElementById('loading');
+  if (loadingEl) {
+    loadingEl.setAttribute('style', 'display: none !important; visibility: hidden !important; opacity: 0 !important;');
+  }
+}
+
 function showLogin() {
-  if (loginSection) loginSection.style.display = 'block';
+  console.log('showLogin() called');
+  console.log('loginSection element:', loginSection);
+  hideLoading(); // Ensure loading screen is hidden
+  if (loginSection) {
+    loginSection.setAttribute('style', 'display: block !important; visibility: visible !important; opacity: 1 !important;');
+    console.log('Login section displayed with !important');
+    console.log('Login section computed display:', getComputedStyle(loginSection).display);
+  }
   if (setupSection) setupSection.style.display = 'none';
   if (dashboard) dashboard.style.display = 'none';
   setStatus('');
@@ -354,6 +371,7 @@ function hideDashboard() {
 }
 
 function showPrivateAccessMessage() {
+  console.log('showPrivateAccessMessage() called');
   hideLogin();
   hideSetup();
   hideDashboard();
@@ -362,11 +380,15 @@ function showPrivateAccessMessage() {
   const loadingEl = document.getElementById('loading');
   if (loadingEl) {
     loadingEl.style.display = 'none';
+    console.log('Loading screen hidden in showPrivateAccessMessage');
   }
   
   // Create private access message
   const privateSection = document.getElementById('private-section') || createPrivateSection();
-  privateSection.style.display = 'block';
+  console.log('Private section element:', privateSection);
+  privateSection.setAttribute('style', 'display: block !important; visibility: visible !important; opacity: 1 !important;');
+  console.log('Private section displayed with !important. Current display:', getComputedStyle(privateSection).display);
+  console.log('Private section innerHTML:', privateSection.innerHTML);
 }
 
 function createPrivateSection() {
@@ -510,13 +532,15 @@ if (hugModal) {
 }
 
 async function main() {
+  console.log('Main function starting...');
+  
   try {
-    console.log('Main function starting...');
-    
     // Hide loading state first
     const loadingEl = document.getElementById('loading');
+    console.log('Loading element found:', !!loadingEl);
     if (loadingEl) {
       loadingEl.style.display = 'none';
+      console.log('Loading screen hidden');
     }
   
   // Check for app version and force update if needed
@@ -555,10 +579,10 @@ async function main() {
   console.log('Saved user:', savedUser);
   console.log('Has valid session:', hasValidSession);
   
-  // If no valid session, show private access message immediately
+  // If no valid session, show login instead of private access message
   if (!hasValidSession) {
-    console.log('Showing private access message');
-    showPrivateAccessMessage();
+    console.log('No valid session, showing login');
+    showLogin();
     return;
   }
 
@@ -689,5 +713,24 @@ setTimeout(() => {
   }
 }, 5000);
 
+// More aggressive fallback - hide loading after 2 seconds regardless
+setTimeout(() => {
+  const loadingEl = document.getElementById('loading');
+  console.log('Aggressive fallback: Force hiding loading screen after 2 seconds');
+  if (loadingEl) {
+    loadingEl.style.display = 'none';
+    loadingEl.style.visibility = 'hidden';
+    loadingEl.style.opacity = '0';
+    loadingEl.setAttribute('style', 'display: none !important; visibility: hidden !important; opacity: 0 !important;');
+    console.log('Loading screen display set to none with !important');
+    console.log('Loading element current styles:', loadingEl.getAttribute('style'));
+    console.log('Loading element computed display:', getComputedStyle(loadingEl).display);
+  }
+  // Show login instead of private access message
+  showLogin();
+}, 2000);
+
+console.log('About to call main() function');
 main();
+console.log('Main() function called');
 
