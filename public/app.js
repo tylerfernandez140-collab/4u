@@ -319,9 +319,9 @@ async function enableNotificationsFlow() {
 }
 
 function showDashboard() {
-  if (loginSection) loginSection.hidden = true;
-  if (setupSection) setupSection.hidden = true;
-  if (dashboard) dashboard.hidden = false;
+  if (loginSection) loginSection.style.display = 'none';
+  if (setupSection) setupSection.style.display = 'none';
+  if (dashboard) dashboard.style.display = 'block';
   if (dashboardHeading) {
     const name = currentUser === 'ivan' ? 'Ivan' : 'Angge';
     dashboardHeading.textContent = `Hi ${name}!`;
@@ -329,28 +329,28 @@ function showDashboard() {
 }
 
 function showSetup() {
-  if (loginSection) loginSection.hidden = true;
-  if (setupSection) setupSection.hidden = false;
-  if (dashboard) dashboard.hidden = true;
+  if (loginSection) loginSection.style.display = 'none';
+  if (setupSection) setupSection.style.display = 'block';
+  if (dashboard) dashboard.style.display = 'none';
 }
 
 function showLogin() {
-  if (loginSection) loginSection.hidden = false;
-  if (setupSection) setupSection.hidden = true;
-  if (dashboard) dashboard.hidden = true;
+  if (loginSection) loginSection.style.display = 'block';
+  if (setupSection) setupSection.style.display = 'none';
+  if (dashboard) dashboard.style.display = 'none';
   setStatus('');
 }
 
 function hideLogin() {
-  if (loginSection) loginSection.hidden = true;
+  if (loginSection) loginSection.style.display = 'none';
 }
 
 function hideSetup() {
-  if (setupSection) setupSection.hidden = true;
+  if (setupSection) setupSection.style.display = 'none';
 }
 
 function hideDashboard() {
-  if (dashboard) dashboard.hidden = true;
+  if (dashboard) dashboard.style.display = 'none';
 }
 
 function showPrivateAccessMessage() {
@@ -360,7 +360,7 @@ function showPrivateAccessMessage() {
   
   // Create private access message
   const privateSection = document.getElementById('private-section') || createPrivateSection();
-  privateSection.hidden = false;
+  privateSection.style.display = 'block';
 }
 
 function createPrivateSection() {

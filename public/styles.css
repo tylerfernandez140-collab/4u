@@ -16,6 +16,11 @@ body {
   color: var(--text);
   background: linear-gradient(180deg, var(--primary) 0%, var(--bg) 40%);
 }
+
+/* Hide all main sections initially to prevent flashing */
+#login, #setup, #dashboard, #private-section {
+  display: none;
+}
 .container {
   min-height: 100%;
   display: grid;
