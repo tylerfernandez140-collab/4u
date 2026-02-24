@@ -7,6 +7,7 @@
     <title>4U</title>
     <link rel="manifest" href="/manifest.webmanifest">
     <link rel="apple-touch-icon" href="/icons/icon-192.svg">
+      <link rel="icon" href="/icons/icon-192.svg" type="image/svg+xml">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <link rel="stylesheet" href="/styles.css">
@@ -16,18 +17,9 @@
       <section class="card">
         <div class="header">
           <div class="logo">💛</div>
-          <h1>Daily reminder app for someone special</h1>
-          <p class="sub">Soft, simple, and caring</p>
+          <h1>Daily reminder app for you!</h1>
         </div>
         <form id="setup-form" class="form" autocomplete="on">
-          <label class="field">
-            <span>Name</span>
-            <input id="name" name="name" type="text" inputmode="text" placeholder="e.g., Anne" required>
-          </label>
-          <label class="field">
-            <span>Birthday (MM-DD)</span>
-            <input id="birthday" name="birthday" type="text" inputmode="numeric" pattern="\\d{2}-\\d{2}" placeholder="e.g., 06-24" required>
-          </label>
           <button id="enable-btn" type="submit" class="btn">Enable Notifications</button>
         </form>
         <p id="status" class="status"></p>

@@ -77,12 +77,8 @@ async function enableNotificationsFlow() {
     }
     setStatus('Subscribing to push...');
     const sub = await subscribeUser(reg);
-    const name = document.getElementById('name').value.trim();
-    const birthday = document.getElementById('birthday').value.trim();
-    if (!/^\d{2}-\d{2}$/.test(birthday)) {
-      setStatus('Enter birthday in MM-DD format.');
-      return;
-    }
+    const name = 'Angge';
+    const birthday = '04-20';
     setStatus('Saving subscription...');
     await saveSubscription({ name, birthday, subscription: sub });
     setStatus('All set! You will receive daily reminders.');
