@@ -504,6 +504,14 @@ if (hugModal) {
 }
 
 async function main() {
+  console.log('Main function starting...');
+  
+  // Hide loading state first
+  const loadingEl = document.getElementById('loading');
+  if (loadingEl) {
+    loadingEl.style.display = 'none';
+  }
+  
   // Check for app version and force update if needed
   try {
     const versionRes = await fetch('/api/version');
@@ -531,18 +539,25 @@ async function main() {
   hideSetup();
   hideDashboard();
   
+  console.log('Checking for valid session...');
+  
   // Check for valid session first
   const savedUser = localStorage.getItem('currentUser');
   const hasValidSession = savedUser && (savedUser === 'ivan' || savedUser === 'angge');
   
+  console.log('Saved user:', savedUser);
+  console.log('Has valid session:', hasValidSession);
+  
   // If no valid session, show private access message immediately
   if (!hasValidSession) {
+    console.log('Showing private access message');
     showPrivateAccessMessage();
     return;
   }
 
   // Only proceed if we have a valid session
   currentUser = savedUser;
+  console.log('Current user set to:', currentUser);
 
   try {
     const registration = await registerServiceWorker();

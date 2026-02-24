@@ -16,10 +16,23 @@
       #login-section, #setup, #dashboard, #private-section {
         display: none !important;
       }
+      
+      /* Show loading state */
+      .loading {
+        display: block !important;
+        text-align: center;
+        padding: 50px;
+        font-size: 18px;
+        color: #666;
+      }
     </style>
   </head>
   <body>
     <main class="container">
+      <!-- Loading state -->
+      <div id="loading" class="loading">
+        <div>Loading...</div>
+      </div>
       <section id="login-section" class="card">
         <div class="header">
           <div class="logo">💛</div>
