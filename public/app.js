@@ -21,7 +21,7 @@ let currentUser = '';
 
 // Check for existing session on load
 function checkExistingSession() {
-  const savedUser = sessionStorage.getItem('currentUser');
+  const savedUser = localStorage.getItem('currentUser');
   if (savedUser && (savedUser === 'ivan' || savedUser === 'angge')) {
     currentUser = savedUser;
     return true;
@@ -45,12 +45,12 @@ async function checkNotificationsEnabled() {
 
 // Save user session
 function saveUserSession(user) {
-  sessionStorage.setItem('currentUser', user);
+  localStorage.setItem('currentUser', user);
 }
 
 // Clear user session
 function clearUserSession() {
-  sessionStorage.removeItem('currentUser');
+  localStorage.removeItem('currentUser');
   currentUser = '';
 }
 
@@ -228,7 +228,7 @@ async function enableNotificationsFlow() {
     const registration = await navigator.serviceWorker.ready;
     console.log('Service worker ready:', registration);
     console.log('Fetching VAPID public key...');
-    const res = await fetch('/api/vapid');
+    const res = await fetch('/api/key');
     if (!res.ok) {
       throw new Error('Failed to fetch VAPID public key');
     }
@@ -431,7 +431,7 @@ if (hugModal) {
 
 async function main() {
   // Check for valid session first
-  const savedUser = sessionStorage.getItem('currentUser');
+  const savedUser = localStorage.getItem('currentUser');
   const hasValidSession = savedUser && (savedUser === 'ivan' || savedUser === 'angge');
   
   // If no valid session, show private access message immediately

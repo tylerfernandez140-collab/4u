@@ -1,0 +1,5 @@
+module.exports = (req, res) => {
+  res.json({ 
+    key: 'BM7b1BQq1rRAGWCvpuRPRtx-XEtiXGOYoMDPzIp9lSNlnN088evvX8Ozo8Vw9ILcN6asxv8iSjuBXGAbNZeBbsA' 
+  });
+};
