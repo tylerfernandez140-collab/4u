@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#f8e8ef">
+    <title>4U</title>
+    <link rel="manifest" href="/manifest.webmanifest">
+    <link rel="apple-touch-icon" href="/icons/icon-192.svg">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <main class="container">
+      <section class="card">
+        <div class="header">
+          <div class="logo">💛</div>
+          <h1>Daily reminder app for someone special</h1>
+          <p class="sub">Soft, simple, and caring</p>
+        </div>
+        <form id="setup-form" class="form" autocomplete="on">
+          <label class="field">
+            <span>Name</span>
+            <input id="name" name="name" type="text" inputmode="text" placeholder="e.g., Anne" required>
+          </label>
+          <label class="field">
+            <span>Birthday (MM-DD)</span>
+            <input id="birthday" name="birthday" type="text" inputmode="numeric" pattern="\\d{2}-\\d{2}" placeholder="e.g., 06-24" required>
+          </label>
+          <button id="enable-btn" type="submit" class="btn">Enable Notifications</button>
+        </form>
+        <p id="status" class="status"></p>
+      </section>
+      <p class="footer">Made with care ✨</p>
+    </main>
+    <script src="/app.js" defer></script>
+  </body>
+  </html>
+

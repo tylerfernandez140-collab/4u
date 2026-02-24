@@ -1,0 +1,251 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #FFE4E1 0%, #FFF0F5 50%, #E6E6FA 100%);
+    min-height: 100vh;
+    color: #4a4a4a;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header */
+.header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-top: 40px;
+}
+
+.title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #FF69B4;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.subtitle {
+    font-size: 1rem;
+    color: #8B7D8B;
+    font-weight: 300;
+}
+
+/* Main content */
+.main-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Card */
+.card {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    padding: 32px;
+    box-shadow: 0 8px 32px rgba(255, 105, 180, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    width: 100%;
+    max-width: 400px;
+}
+
+.card-content {
+    text-align: center;
+}
+
+.card-title {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #FF69B4;
+    margin-bottom: 12px;
+}
+
+.card-description {
+    font-size: 0.95rem;
+    color: #8B7D8B;
+    margin-bottom: 32px;
+    line-height: 1.5;
+}
+
+/* Form */
+.form {
+    margin-bottom: 24px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #8B7D8B;
+    margin-bottom: 8px;
+}
+
+.input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #E6E6FA;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-family: inherit;
+    background: rgba(255, 255, 255, 0.8);
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.input:focus {
+    border-color: #FF69B4;
+    box-shadow: 0 0 0 3px rgba(255, 105, 180, 0.1);
+}
+
+.input:valid {
+    border-color: #DDA0DD;
+}
+
+/* Buttons */
+.btn {
+    width: 100%;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    outline: none;
+    font-family: inherit;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #FF69B4, #FFB6C1);
+    color: white;
+    box-shadow: 0 4px 16px rgba(255, 105, 180, 0.3);
+}
+
+.btn-primary:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 105, 180, 0.4);
+}
+
+.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.8);
+    color: #FF69B4;
+    border: 2px solid #FF69B4;
+}
+
+.btn-secondary:hover {
+    background: #FF69B4;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.btn-text, .btn-loader {
+    transition: opacity 0.3s ease;
+}
+
+/* Messages */
+.success-message, .error-message {
+    text-align: center;
+    padding: 24px;
+    border-radius: 16px;
+    margin-top: 20px;
+}
+
+.success-message {
+    background: rgba(144, 238, 144, 0.1);
+    border: 2px solid rgba(144, 238, 144, 0.3);
+}
+
+.error-message {
+    background: rgba(255, 182, 193, 0.1);
+    border: 2px solid rgba(255, 182, 193, 0.3);
+}
+
+.success-icon, .error-icon {
+    font-size: 2.5rem;
+    margin-bottom: 16px;
+}
+
+.success-message h3 {
+    color: #2E8B57;
+    font-size: 1.3rem;
+    margin-bottom: 12px;
+    font-weight: 500;
+}
+
+.error-message p {
+    color: #DC143C;
+    margin-bottom: 16px;
+}
+
+.success-message p {
+    color: #2E8B57;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    padding: 20px 0;
+    font-size: 0.85rem;
+    color: #8B7D8B;
+    font-weight: 300;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .container {
+        padding: 16px;
+    }
+    
+    .title {
+        font-size: 1.8rem;
+    }
+    
+    .card {
+        padding: 24px;
+    }
+    
+    .header {
+        padding-top: 20px;
+        margin-bottom: 30px;
+    }
+}
+
+/* Loading animation */
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.6; }
+    100% { opacity: 1; }
+}
+
+.btn-loader {
+    animation: pulse 1.5s infinite;
+}
