@@ -23,20 +23,62 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
+self.addEventListener('message', (event) => {
+  const data = event.data;
+  
+  if (data.type === 'USER_LOGIN') {
+    // Store current user in service worker
+    self.currentUser = data.userId;
+    console.log('User logged in:', self.currentUser);
+  } else if (data.type === 'USER_LOGOUT') {
+    // Clear current user
+    self.currentUser = null;
+    console.log('User logged out');
+  }
+});
+
 self.addEventListener('push', (event) => {
-  let data = {};
-  try {
-    if (event.data) {
-      try { data = event.data.json(); } catch (_) { data = { body: event.data.text() }; }
-    }
-  } catch (e) {}
-  const title = data.title || 'Daily Reminder';
-  const body = data.body || 'A new caring message for you 💛';
+  const data = event.data.json();
+  console.log('Push event received in service worker:', data);
+  
+  const title = data.title || 'You received a hug!';
+  const body = data.body || 'Someone sent you a hug 🤗';
   const icon = data.icon || '/icons/icon-192.svg';
   const badge = data.badge || '/icons/icon-192.svg';
   const url = data.url || '/';
+  
+  console.log('Sending notification with:', { title, sender: data.sender, targetUser: data.targetUser });
+  
+  // Show notification
   event.waitUntil(
-    self.registration.showNotification(title, { body, icon, badge, data: { url } })
+    self.registration.showNotification(title, { 
+      body, 
+      icon, 
+      badge,
+      vibrate: [200, 100, 200], // Vibrate pattern: 200ms on, 100ms off, 200ms on
+      sound: '/notification-sound.mp3', // Sound file (will need to add this)
+      requireInteraction: true, // Keep notification until user interacts
+      data: { url, sender: data.sender, targetUser: data.targetUser } 
+    })
+  );
+  
+  // Also send message to client to show modal (only for receiver)
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(clientList => {
+      console.log('Found clients:', clientList.length);
+      clientList.forEach((client, index) => {
+        console.log(`Sending message to client ${index}:`, {
+          type: 'HUG_RECEIVED',
+          sender: data.sender || 'Someone',
+          targetUser: data.targetUser
+        });
+        client.postMessage({
+          type: 'HUG_RECEIVED',
+          sender: data.sender || 'Someone',
+          targetUser: data.targetUser
+        });
+      });
+    })
   );
 });
 

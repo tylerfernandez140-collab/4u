@@ -13,17 +13,17 @@ if (!admin.apps.length) {
 }
 const db = admin.firestore();
 
-export default async function handler(req, res) {
+async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).send('Method Not Allowed');
   }
 
   try {
-    const { name, birthday, subscription } = req.body || {};
-    if (!name || !birthday || !subscription || !subscription.endpoint) {
+    const { name, birthday, subscription, userId } = req.body || {};
+    if (!name || !birthday || !subscription || !subscription.endpoint || !userId) {
       return res.status(400).json({ error: 'Invalid payload' });
     }
-    const userRef = db.collection('users').doc('partner');
+    const userRef = db.collection('users').doc(userId);
     await userRef.set({ name, birthday }, { merge: true });
     const id = crypto.createHash('sha256').update(subscription.endpoint).digest('hex');
     const subRef = userRef.collection('subscriptions').doc(id);
@@ -33,3 +33,5 @@ export default async function handler(req, res) {
     res.status(500).json({ error: e.message });
   }
 }
+
+module.exports = { handler };

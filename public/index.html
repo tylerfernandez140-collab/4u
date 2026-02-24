@@ -14,7 +14,26 @@
   </head>
   <body>
     <main class="container">
-      <section class="card">
+      <section id="login-section" class="card">
+        <div class="header">
+          <div class="logo">💛</div>
+          <h1>Hello!</h1>
+        </div>
+        <form id="login-form" class="form" autocomplete="on">
+          <input type="text" id="name-input" class="input" placeholder="Enter your name">
+          <button id="login-btn" type="submit" class="btn">Login</button>
+        </form>
+      </section>
+      <section id="dashboard" class="card" hidden>
+        <div class="header">
+          <div class="logo">💛</div>
+          <h1 id="dashboard-heading"></h1>
+          <button id="logout-btn" class="logout-btn">🚪</button>
+        </div>
+        <button id="send-hug-btn" class="btn">Send a Hug</button>
+        <p id="dashboard-status" class="status"></p>
+      </section>
+      <section id="setup-section" class="card" hidden>
         <div class="header">
           <div class="logo">💛</div>
           <h1>Daily reminder app for you!</h1>
@@ -26,6 +45,30 @@
       </section>
       <p class="footer">Made with care ✨</p>
     </main>
+    
+    <!-- Hug Modal -->
+    <div id="hug-modal" class="modal" hidden>
+      <div class="modal-content">
+        <div class="modal-header">
+          <span class="modal-close">&times;</span>
+        </div>
+        <div class="modal-body">
+          <div class="hug-icon">🤗</div>
+          <h2 id="hug-message">Ivan sent you a hug!</h2>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Success Modal -->
+    <div id="success-modal" class="modal" hidden>
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="hug-icon">✅</div>
+          <h2 id="success-message">Hug sent to Angge!</h2>
+        </div>
+      </div>
+    </div>
+    
     <script src="/app.js" defer></script>
   </body>
   </html>
