@@ -121,16 +121,8 @@ async function sendHug() {
     console.log('Showing success modal for:', recipientName);
     showSuccessModal(recipientName);
     
-    // Simulate cross-user notification locally
-    setTimeout(() => {
-      if (currentUser === 'ivan') {
-        // If Ivan sent hug, show "Ivan sent you a hug!" modal
-        showHugModal('Ivan');
-      } else {
-        // If Angge sent hug, show "Angge sent you a hug!" modal  
-        showHugModal('Angge');
-      }
-    }, 1000);
+    // Note: In real deployment, the recipient will receive the push notification
+    // and see "Ivan sent you a hug!" or "Angge sent you a hug!" modal
     
     setStatus(''); // Clear status
     
