@@ -27,9 +27,9 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const req = event.request;
   if (req.method !== 'GET') return;
-  event.respondWith(
-    caches.match(req).then((cached) => cached || fetch(req))
-  );
+  
+  // Bypass cache for all requests to force fresh content
+  event.respondWith(fetch(req));
 });
 
 self.addEventListener('message', (event) => {

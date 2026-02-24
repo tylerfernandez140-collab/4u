@@ -17,6 +17,20 @@ const modalClose = document.querySelector('.modal-close');
 const successModal = document.getElementById('success-modal');
 const successMessage = document.getElementById('success-message');
 
+// Add cache busting for debugging
+const CACHE_BUST = Date.now();
+console.log('App loading with cache bust:', CACHE_BUST);
+
+// Force clear any remaining caches
+if ('caches' in window) {
+  caches.keys().then(names => {
+    names.forEach(name => {
+      console.log('Deleting cache:', name);
+      caches.delete(name);
+    });
+  });
+}
+
 let currentUser = '';
 
 // Check for existing session on load
