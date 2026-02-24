@@ -110,6 +110,34 @@ function setStatus(msg) {
   if (activeStatusEl) activeStatusEl.textContent = msg || '';
 }
 
+function checkForIncomingHugs() {
+  try {
+    const hugData = localStorage.getItem('pendingHug');
+    if (!hugData) return;
+    
+    const hug = JSON.parse(hugData);
+    const now = Date.now();
+    
+    // Only show hug if it's from the other user and within last 30 seconds
+    const senderName = currentUser === 'ivan' ? 'Ivan' : 'Angge';
+    const otherUser = currentUser === 'ivan' ? 'Angge' : 'Ivan';
+    
+    if (hug.sender === otherUser && (now - hug.timestamp) < 30000) {
+      console.log('Showing incoming hug from:', hug.sender);
+      showHugModal(hug.sender);
+      // Clear the hug after showing
+      localStorage.removeItem('pendingHug');
+    }
+  } catch (error) {
+    console.error('Error checking incoming hugs:', error);
+  }
+}
+
+// Poll for incoming hugs every 2 seconds
+function startHugPolling() {
+  setInterval(checkForIncomingHugs, 2000);
+}
+
 async function sendHug() {
   try {
     sendHugBtn.disabled = true;
@@ -121,8 +149,16 @@ async function sendHug() {
     console.log('Showing success modal for:', recipientName);
     showSuccessModal(recipientName);
     
-    // Note: In real deployment, the recipient will receive the push notification
-    // and see "Ivan sent you a hug!" or "Angge sent you a hug!" modal
+    // Store hug in localStorage for cross-device communication
+    const hugData = {
+      sender: currentUser === 'ivan' ? 'Ivan' : 'Angge',
+      timestamp: Date.now(),
+      id: Math.random().toString(36).substr(2, 9)
+    };
+    localStorage.setItem('pendingHug', JSON.stringify(hugData));
+    
+    // Check for incoming hugs periodically
+    checkForIncomingHugs();
     
     setStatus(''); // Clear status
     
@@ -537,6 +573,9 @@ async function main() {
   } else {
     showSetup();
   }
+  
+  // Start polling for incoming hugs
+  startHugPolling();
 }
 
 main();
