@@ -217,24 +217,41 @@ async function saveSubscription({ name, birthday, subscription }) {
 
 async function enableNotificationsFlow() {
   try {
-    setStatus('Preparing...');
-    const reg = await registerServiceWorker();
-    if (!reg) return;
-    setStatus('Requesting permission...');
-    const perm = await requestPermission();
-    if (perm !== 'granted') {
-      setStatus('Permission denied.');
+    console.log('Requesting notification permission...');
+    const permission = await Notification.requestPermission();
+    console.log('Permission result:', permission);
+    if (permission !== 'granted') {
+      setStatus('Notification permission denied. Please enable in browser settings.');
       return;
     }
-    setStatus('Subscribing to push...');
-    const sub = await subscribeUser(reg);
-    const name = currentUser === 'ivan' ? 'Ivan' : 'Angge';
-    const birthday = '01-01';
-    setStatus('Saving subscription...');
-    await saveSubscription({ name, birthday, subscription: sub });
-    setStatus('All set! You will receive daily reminders.');
+    console.log('Permission granted, registering service worker...');
+    const registration = await navigator.serviceWorker.ready;
+    console.log('Service worker ready:', registration);
+    console.log('Fetching VAPID public key...');
+    const res = await fetch('/api/vapidPublicKey');
+    if (!res.ok) {
+      throw new Error('Failed to fetch VAPID public key');
+    }
+    const data = await res.json();
+    console.log('VAPID response:', data);
+    const vapidPublicKey = data.key;
+    console.log('Subscribing to push...');
+    const subscription = await registration.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: urlBase64ToUint8Array(vapidPublicKey)
+    });
+    console.log('Push subscription created:', subscription);
+    console.log('Sending subscription to server...');
+    await fetch('/api/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ subscription, userId: currentUser }),
+    });
+    console.log('Subscription saved to server');
+    setStatus('Notifications enabled! 🎉');
     showDashboard();
   } catch (err) {
+    console.error('Enable notifications error:', err);
     setStatus('Error: ' + (err && err.message ? err.message : String(err)));
   }
 }
