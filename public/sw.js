@@ -10,10 +10,17 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('activate', (event) => {
+  console.log('Service worker activating...');
   event.waitUntil(
     caches.keys().then((keys) =>
-      Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)))
-    ).then(() => self.clients.claim())
+      Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => {
+        console.log('Deleting old cache:', k);
+        return caches.delete(k);
+      }))
+    ).then(() => {
+      console.log('Service worker activated');
+      self.clients.claim();
+    })
   );
 });
 

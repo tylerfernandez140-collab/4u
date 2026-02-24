@@ -596,6 +596,20 @@ async function main() {
   
   // Start polling for incoming hugs
   startHugPolling();
+  
+  // Add manual refresh for debugging (remove in production)
+  if (window.location.hostname === 'localhost') {
+    window.forceRefresh = () => {
+      console.log('Force refreshing app...');
+      localStorage.clear();
+      caches.keys().then(keys => {
+        Promise.all(keys.map(key => caches.delete(key)));
+      }).then(() => {
+        window.location.reload();
+      });
+    };
+    console.log('Debug mode: Call forceRefresh() to clear cache and reload');
+  }
 }
 
 main();
