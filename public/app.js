@@ -504,13 +504,14 @@ if (hugModal) {
 }
 
 async function main() {
-  console.log('Main function starting...');
-  
-  // Hide loading state first
-  const loadingEl = document.getElementById('loading');
-  if (loadingEl) {
-    loadingEl.style.display = 'none';
-  }
+  try {
+    console.log('Main function starting...');
+    
+    // Hide loading state first
+    const loadingEl = document.getElementById('loading');
+    if (loadingEl) {
+      loadingEl.style.display = 'none';
+    }
   
   // Check for app version and force update if needed
   try {
@@ -661,7 +662,26 @@ async function main() {
     };
     console.log('Debug mode: Call forceRefresh() to clear cache and reload');
   }
+  
+  } catch (error) {
+    console.error('Main function error:', error);
+    // Hide loading and show login as fallback
+    const loadingEl = document.getElementById('loading');
+    if (loadingEl) loadingEl.style.display = 'none';
+    showLogin();
+  }
 }
+
+// Fallback: Hide loading state after 5 seconds in case JavaScript fails
+setTimeout(() => {
+  const loadingEl = document.getElementById('loading');
+  if (loadingEl && loadingEl.style.display !== 'none') {
+    console.log('Fallback: Hiding loading state after timeout');
+    loadingEl.style.display = 'none';
+    // Show login as fallback
+    showLogin();
+  }
+}, 5000);
 
 main();
 
