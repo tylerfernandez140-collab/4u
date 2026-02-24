@@ -228,7 +228,7 @@ async function enableNotificationsFlow() {
     const registration = await navigator.serviceWorker.ready;
     console.log('Service worker ready:', registration);
     console.log('Fetching VAPID public key...');
-    const res = await fetch('/api/vapidPublicKey');
+    const res = await fetch('/api/vapid');
     if (!res.ok) {
       throw new Error('Failed to fetch VAPID public key');
     }
