@@ -230,6 +230,46 @@ input:focus { border-color: #d6c9ff; box-shadow: 0 0 0 3px rgba(115,92,221,.12);
   color: var(--muted);
   text-align: center;
 }
+/* Private Access Screen */
+.private-content {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.private-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+}
+
+.private-content h1 {
+  color: var(--primary);
+  margin-bottom: 20px;
+  font-size: 2rem;
+}
+
+.private-content p {
+  color: var(--text);
+  margin-bottom: 15px;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.private-subtitle {
+  color: var(--secondary) !important;
+  font-size: 1rem !important;
+  font-style: italic;
+}
+
+.btn-back {
+  background: var(--secondary);
+  color: white;
+  margin-top: 20px;
+}
+
+.btn-back:hover {
+  background: var(--primary);
+  transform: translateY(-2px);
+}
 .footer {
   color: var(--muted);
   font-size: .9rem;

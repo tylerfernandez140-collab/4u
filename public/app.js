@@ -134,21 +134,6 @@ async function sendHug() {
     console.log('Showing success modal for:', recipientName);
     showSuccessModal(recipientName);
     
-    // Simulate receiving modal for testing (fallback for local development)
-    setTimeout(() => {
-      const senderName = currentUser === 'ivan' ? 'Ivan' : 'Angge';
-      console.log('Simulating received hug for:', senderName);
-      // This simulates what would happen when the other user receives the hug
-      // In production, this would come through the service worker
-      if (confirm(`For testing: Simulate ${senderName} sending hug to ${recipientName}?`)) {
-        // Store this in sessionStorage so the "other user" can see it when they login
-        sessionStorage.setItem('pendingHug', JSON.stringify({
-          sender: senderName,
-          timestamp: Date.now()
-        }));
-      }
-    }, 1000);
-    
   } catch (err) {
     console.log('Send hug error:', err);
     setStatus('Error: ' + (err && err.message ? err.message : String(err)));
@@ -274,6 +259,43 @@ function showLogin() {
   if (loginSection) loginSection.hidden = false;
   if (setupSection) setupSection.hidden = true;
   if (dashboard) dashboard.hidden = true;
+  setStatus('');
+}
+
+function showPrivateAccessMessage() {
+  hideLogin();
+  hideSetup();
+  hideDashboard();
+  
+  // Create private access message
+  const privateSection = document.getElementById('private-section') || createPrivateSection();
+  privateSection.hidden = false;
+}
+
+function createPrivateSection() {
+  const section = document.createElement('section');
+  section.id = 'private-section';
+  section.className = 'container';
+  section.innerHTML = `
+    <div class="private-content">
+      <div class="private-icon">🔒</div>
+      <h1>Private App</h1>
+      <p>This is a private application intended only for Ivan and Angge.</p>
+      <p>Access is restricted to registered users only.</p>
+      <button class="btn btn-back" onclick="backToLogin()">Back to Login</button>
+    </div>
+  `;
+  main.appendChild(section);
+  return section;
+}
+
+function backToLogin() {
+  const privateSection = document.getElementById('private-section');
+  if (privateSection) {
+    privateSection.hidden = true;
+  }
+  showLogin();
+  setStatus('');
 }
 
 async function login(name) {
@@ -311,7 +333,8 @@ async function login(name) {
       }
     }, 1000);
   } else {
-    setStatus('Invalid name. Please enter "Ivan" or "Angge".');
+    // Show private access message
+    showPrivateAccessMessage();
   }
 }
 
@@ -390,19 +413,103 @@ if (hugModal) {
 }
 
 async function main() {
-  await registerServiceWorker();
+  // Check for valid session first
+  const savedUser = sessionStorage.getItem('currentUser');
+  const hasValidSession = savedUser && (savedUser === 'ivan' || savedUser === 'angge');
   
-  // Check if user is already logged in
-  if (checkExistingSession()) {
-    // User has existing session, check if notifications are set up
-    const notificationsEnabled = await checkNotificationsEnabled();
-    if (notificationsEnabled) {
-      showDashboard();
-    } else {
-      showSetup();
+  // If no valid session, show private access message immediately
+  if (!hasValidSession) {
+    showPrivateAccessMessage();
+    return;
+  }
+
+  // Only proceed if we have a valid session
+  currentUser = savedUser;
+
+  try {
+    const registration = await registerServiceWorker();
+    if (registration) {
+      await subscribeUser(registration);
     }
+  } catch (err) {
+    console.error('Service worker setup failed:', err);
+    setStatus('Service worker setup failed: ' + err.message);
+  }
+
+  if (loginForm) {
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      loginBtn.disabled = true;
+      const name = nameInput.value;
+      await login(name);
+      const lowerName = name.toLowerCase();
+      if (lowerName === 'ivan' || lowerName === 'angge') {
+        setTimeout(() => {
+          loginBtn.disabled = false;
+        }, 1000);
+      } else {
+        setTimeout(() => {
+          loginBtn.disabled = false;
+        }, 1000);
+      }
+    });
+  }
+
+  if (enableBtn) {
+    enableBtn.addEventListener('click', enableNotificationsFlow);
+  }
+
+  if (sendHugBtn) {
+    sendHugBtn.addEventListener('click', sendHug);
+  }
+
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      logout();
+    });
+  }
+
+  // Listen for messages from service worker
+  navigator.serviceWorker.addEventListener('message', (event) => {
+    console.log('Received message from service worker:', event.data);
+    if (event.data && event.data.type === 'HUG_RECEIVED') {
+      console.log('Hug received event:', {
+        sender: event.data.sender,
+        targetUser: event.data.targetUser,
+        currentUser: currentUser
+      });
+      // Only show modal if current user is the target (receiver), not the sender
+      if (event.data.targetUser === currentUser) {
+        console.log('Showing hug modal for receiver');
+        showHugModal(event.data.sender);
+      } else {
+        console.log('Not showing modal - user is not the target');
+      }
+    }
+  });
+
+  // Modal close button
+  if (modalClose) {
+    modalClose.addEventListener('click', hideHugModal);
+  }
+
+  // Close modal when clicking outside
+  window.addEventListener('click', (event) => {
+    if (event.target === hugModal) {
+      hideHugModal();
+    }
+    if (event.target === successModal) {
+      hideSuccessModal();
+    }
+  });
+
+  // Show appropriate screen for valid user
+  const notificationsEnabled = await checkNotificationsEnabled();
+  if (notificationsEnabled) {
+    showDashboard();
   } else {
-    showLogin();
+    showSetup();
   }
 }
 
