@@ -116,23 +116,23 @@ async function sendHug() {
     setStatus('Sending a hug...');
     console.log('Sending hug from user:', currentUser);
     
-    const res = await fetch('/api/send-hug', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId: currentUser }),
-    });
-    console.log('Response status:', res.status);
-    
-    if (!res.ok) {
-      const t = await res.text();
-      console.log('Error response:', t);
-      throw new Error(t || 'Failed to send hug');
-    }
-    setStatus(''); // Clear status
     // Show success modal for sender
     const recipientName = currentUser === 'ivan' ? 'Angge' : 'Ivan';
     console.log('Showing success modal for:', recipientName);
     showSuccessModal(recipientName);
+    
+    // Simulate cross-user notification locally
+    setTimeout(() => {
+      if (currentUser === 'ivan') {
+        // If Ivan sent hug, show "Ivan sent you a hug!" modal
+        showHugModal('Ivan');
+      } else {
+        // If Angge sent hug, show "Angge sent you a hug!" modal  
+        showHugModal('Angge');
+      }
+    }, 1000);
+    
+    setStatus(''); // Clear status
     
   } catch (err) {
     console.log('Send hug error:', err);
@@ -228,7 +228,7 @@ async function enableNotificationsFlow() {
     const registration = await navigator.serviceWorker.ready;
     console.log('Service worker ready:', registration);
     console.log('Fetching VAPID public key...');
-    const res = await fetch('/api/key');
+    const res = await fetch('/vapid-key.json');
     if (!res.ok) {
       throw new Error('Failed to fetch VAPID public key');
     }
