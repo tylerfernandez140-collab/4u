@@ -422,6 +422,11 @@ if (hugModal) {
 }
 
 async function main() {
+  // Hide all sections initially to prevent flashing
+  hideLogin();
+  hideSetup();
+  hideDashboard();
+  
   // Check for valid session first
   const savedUser = localStorage.getItem('currentUser');
   const hasValidSession = savedUser && (savedUser === 'ivan' || savedUser === 'angge');
