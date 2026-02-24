@@ -376,14 +376,14 @@ function createPrivateSection() {
       <button class="btn btn-back" onclick="backToLogin()">Back to Login</button>
     </div>
   `;
-  main.appendChild(section);
+  document.querySelector('main').appendChild(section);
   return section;
 }
 
 function backToLogin() {
   const privateSection = document.getElementById('private-section');
   if (privateSection) {
-    privateSection.hidden = true;
+    privateSection.style.display = 'none';
   }
   showLogin();
   setStatus('');
