@@ -181,8 +181,23 @@ async function registerServiceWorker() {
     return null;
   }
   const reg = await navigator.serviceWorker.register('/sw.js');
-  // Force update to ensure latest version
-  reg.update();
+  
+  // Check for updates every 30 seconds
+  setInterval(async () => {
+    await reg.update();
+  }, 30000);
+  
+  // Listen for controlling changes
+  reg.addEventListener('updatefound', () => {
+    const newWorker = reg.installing;
+    newWorker.addEventListener('statechange', () => {
+      if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+        // New version available, reload the page
+        window.location.reload();
+      }
+    });
+  });
+  
   return reg;
 }
 
